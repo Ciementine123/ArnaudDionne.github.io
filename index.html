@@ -54,6 +54,46 @@
         margin-top: 2rem;
       }
 
+      .spotify-card {
+        display: grid;
+        grid-template-columns: 96px 1fr;
+        gap: 1rem;
+        padding: 1rem;
+        border: 1px solid #d2d6dc;
+        border-radius: 12px;
+        background: #ffffff;
+        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+        opacity: 0;
+        transform: translateY(32px);
+      }
+
+      .spotify-card img {
+        width: 96px;
+        height: 96px;
+        object-fit: cover;
+        border-radius: 8px;
+      }
+
+      .spotify-card h3 {
+        margin: 0 0 0.25rem;
+      }
+
+      button {
+        border: none;
+        background: #2563eb;
+        color: #ffffff;
+        padding: 0.65rem 1.25rem;
+        border-radius: 999px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 200ms ease, box-shadow 200ms ease;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 18px rgba(37, 99, 235, 0.25);
+      }
+
       footer {
         margin-top: 4rem;
         padding-top: 1rem;
@@ -91,6 +131,26 @@
         </p>
       </section>
 
+      <section id="spotify">
+        <h2>Spotify Activity</h2>
+        <p>
+          Authenticate with the Spotify Web API, then click the button below to fetch your latest track. (See inline comments
+          in the JavaScript section for setup steps.)
+        </p>
+        <button id="load-spotify">Load latest track</button>
+        <article id="spotify-card" class="spotify-card" hidden>
+          <img id="spotify-artwork" alt="Album artwork" />
+          <div>
+            <h3 id="spotify-track">Track title</h3>
+            <p id="spotify-artist">Artist name</p>
+            <p id="spotify-album" style="margin: 0.25rem 0 0;">Album • <span id="spotify-album-name"></span></p>
+            <p id="spotify-played" style="margin: 0.75rem 0 0; font-size: 0.875rem; color: #52606d;">
+              Last played: <span id="spotify-played-at"></span>
+            </p>
+          </div>
+        </article>
+      </section>
+
       <section id="contact">
         <h2>Contact</h2>
         <p>
@@ -103,9 +163,84 @@
       <p>Copyright &copy; <span id="year"></span> Arnaud Dionne. Built by hand with vanilla HTML and CSS.</p>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-n9jNwyqamBxJG+pI5YPzBWMtwL4zCwRwPFQokWcU3PHrWwIu/8A1UFvsSNAK4N59k2MSw6RJWC85MtUbI7AjJQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
       // Keep footer year current without extra maintenance.
       document.getElementById("year").textContent = new Date().getFullYear();
+
+      // --- Spotify API integration -----------------------------------------------------------
+      // GitHub Pages cannot hide secrets, so use the Spotify PKCE flow locally or via a proxy.
+      // 1. Visit https://developer.spotify.com/dashboard to register an app and add a redirect URI.
+      // 2. Implement the Authorization Code with PKCE exchange (client-side) or route via your own backend.
+      // 3. Store the user access token in localStorage under the key "spotifyAccessToken" to reuse it here.
+      // 4. When the token expires, refresh it through your PKCE flow before calling fetchSpotifyTrack().
+
+      async function fetchSpotifyTrack() {
+        const token = localStorage.getItem("spotifyAccessToken");
+
+        if (!token) {
+          alert("No Spotify access token found. Run your PKCE auth flow and store the token first.");
+          return;
+        }
+
+        try {
+          const response = await fetch("https://api.spotify.com/v1/me/player/recently-played?limit=1", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response.status === 401) {
+            alert("Token expired. Refresh it via your auth flow, then try again.");
+            return;
+          }
+
+          if (!response.ok) {
+            throw new Error(`Spotify request failed: ${response.status} ${response.statusText}`);
+          }
+
+          const data = await response.json();
+          const latest = data.items?.[0];
+
+          if (!latest) {
+            alert("No recently played tracks found.");
+            return;
+          }
+
+          const { track, played_at: playedAt } = latest;
+          const card = document.getElementById("spotify-card");
+
+          document.getElementById("spotify-track").textContent = track.name;
+          document.getElementById("spotify-artist").textContent = track.artists.map((artist) => artist.name).join(", ");
+          document.getElementById("spotify-album-name").textContent = track.album.name;
+          document.getElementById("spotify-artwork").src = track.album.images[1]?.url || track.album.images[0]?.url || "";
+          document.getElementById("spotify-played-at").textContent = new Date(playedAt).toLocaleString();
+
+          card.hidden = false;
+
+          // Trigger the GSAP entry animation when fresh data loads.
+          gsap.fromTo(
+            card,
+            { opacity: 0, y: 32 },
+            { opacity: 1, y: 0, duration: 1, ease: "power3.out" }
+          );
+        } catch (error) {
+          console.error(error);
+          alert("Unable to load Spotify data. See console for details.");
+        }
+      }
+
+      document.getElementById("load-spotify").addEventListener("click", fetchSpotifyTrack);
+
+      // --- Example GSAP animation ------------------------------------------------------------
+      // Animate the hero elements on page load to demonstrate timeline sequencing.
+      window.addEventListener("load", () => {
+        const tl = gsap.timeline({ defaults: { duration: 1, ease: "power3.out" } });
+
+        tl.from("header h1", { y: 40, opacity: 0 })
+          .from("header p", { y: 20, opacity: 0 }, "-=0.6")
+          .from("nav a", { y: 10, opacity: 0, stagger: 0.1 }, "-=0.6");
+      });
     </script>
   </body>
 </html>
