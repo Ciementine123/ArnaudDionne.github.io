@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Arnaud Dionne</title>
+    <link rel="icon" href="data:," />
+    <style>
+      :root {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: #1f2933;
+        background: #f8fafc;
+        line-height: 1.6;
+      }
+
+      body {
+        margin: 0;
+        padding: 0 1.5rem 2rem;
+      }
+
+      header,
+      main,
+      footer {
+        max-width: 60rem;
+        margin: 0 auto;
+      }
+
+      header {
+        padding: 3rem 0 1rem;
+      }
+
+      h1 {
+        font-size: clamp(2.5rem, 4vw, 3rem);
+        margin: 0;
+      }
+
+      nav {
+        margin-top: 1rem;
+      }
+
+      nav a {
+        display: inline-block;
+        margin-right: 1rem;
+        text-decoration: none;
+        color: #2563eb;
+      }
+
+      nav a:hover {
+        text-decoration: underline;
+      }
+
+      section {
+        margin-top: 2rem;
+      }
+
+      footer {
+        margin-top: 4rem;
+        padding-top: 1rem;
+        border-top: 1px solid #d2d6dc;
+        font-size: 0.875rem;
+        color: #52606d;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Arnaud Dionne</h1>
+      <p>Welcome! This page is a clean slate so you can practice writing raw HTML and CSS.</p>
+
+      <nav>
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main>
+      <section id="about">
+        <h2>About</h2>
+        <p>
+          Replace this text with your story. You can add lists, images, or even experiment with layout by editing the HTML
+          and CSS in this file.
+        </p>
+      </section>
+
+      <section id="projects">
+        <h2>Projects</h2>
+        <p>
+          Showcase what you are working on. Add cards, grids, or custom components to get more hands-on HTML practice.
+        </p>
+      </section>
+
+      <section id="contact">
+        <h2>Contact</h2>
+        <p>
+          Provide your email or links to social profiles. You can also embed a form or other interactive elements here.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <p>Copyright &copy; <span id="year"></span> Arnaud Dionne. Built by hand with vanilla HTML and CSS.</p>
+    </footer>
+
+    <script>
+      // Keep footer year current without extra maintenance.
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>

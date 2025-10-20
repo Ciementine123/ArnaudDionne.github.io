@@ -1,8 +1,6 @@
 title: Arnaud Dionne
 email: you@example.com
 description: >-
-  A base GitHub Pages site built with the Architect theme.
+  Personal GitHub Pages site built from a custom HTML layout.
 baseurl: ""
 url: "https://ciementine123.github.io"
-theme: jekyll-theme-architect
-show_downloads: false
