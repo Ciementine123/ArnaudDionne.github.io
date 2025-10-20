@@ -1,261 +1,241 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Arnaud Dionne</title>
-    <link rel="icon" href="data:," />
-    <style>
-      :root {
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        color: #000000;
-        background: #1c6dbd;
-        line-height: 1.6;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arnaud Dionne</title>
+  <style>
+    /* --- Page layout --- */
+    body {
+      margin: 0;
+      background: white;
+      color: white;
+      font-family: Arial, sans-serif;
+      transition: background-color 1s ease; /* <— fade duration & easing */
+    }
+        /* --- Full-screen positioning context --- */
+    .viewport {
+      position: relative;  /* makes children with absolute position anchor here */
+      height: 100vh;       /* full window height */
+    }
 
-      body {
-        margin: 0;
-        padding: 0 1.5rem 2rem;
-      }
+    /* --- Reusable absolute centering --- */
+    .centered {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
 
-      header,
-      main,
-      footer {
-        max-width: 60rem;
-        margin: 0 auto;
-      }
+    /* --- Hide/show helper --- */
+    .hidden { display: none; }
 
-      header {
-        padding: 3rem 0 1rem;
-      }
+    /* --- Simple button styling --- */
+    #nameBtn {
+      display: inline-block;
+      cursor: pointer;
+      font-size: 3rem;
+      font-weight: bold;
+      animation: fadeInFromRight 1s forwards;
+      background: transparent;
+      border: none;
+      color: black;
+    }
 
-      h1 {
-        font-size: clamp(2.5rem, 4vw, 3rem);
-        margin: 0;
-      }
+    /* --- Container for the Spotify info --- */
+    #spotifyCard {
+      background: white;
+      color: black;
+      border-radius: 12px;
+      padding: 1rem;
+      width: 300px;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+    }
 
-      nav {
-        margin-top: 1rem;
-      }
+    #artwork {
+      width: 100%;
+      border-radius: 10px;
+    }
 
-      nav a {
-        display: inline-block;
-        margin-right: 1rem;
-        text-decoration: none;
-        color: #2563eb;
-      }
-
-      nav a:hover {
-        text-decoration: underline;
-      }
-
-      section {
-        margin-top: 2rem;
-      }
-
-      .spotify-card {
-        display: grid;
-        grid-template-columns: 96px 1fr;
-        gap: 1rem;
-        padding: 1rem;
-        border: 1px solid #d2d6dc;
-        border-radius: 12px;
-        background: #ffffff;
-        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+    /* --- Animation keyframes --- */
+    @keyframes fadeInFromRight {
+      from {
         opacity: 0;
-        transform: translateY(32px);
+        transform: translate(-50%, -50%) translateX(1000px);
       }
-
-      .spotify-card img {
-        width: 96px;
-        height: 96px;
-        object-fit: cover;
-        border-radius: 8px;
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%) translateX(0);
       }
+    }
 
-      .spotify-card h3 {
-        margin: 0 0 0.25rem;
+    @keyframes fadeOutToLeft {
+      from {
+        opacity: 1;
+        transform: translate(-50%, -50%) translateX(0);
       }
-
-      button {
-        border: none;
-        background: #2563eb;
-        color: #ffffff;
-        padding: 0.65rem 1.25rem;
-        border-radius: 999px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: transform 200ms ease, box-shadow 200ms ease;
+      to {
+        opacity: 0;
+        transform: translate(-50%, -50%) translateX(-1000px);
       }
+    }
 
-      button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 18px rgba(37, 99, 235, 0.25);
-      }
+    /* --- Helper classes toggled by JavaScript --- */
+    #nameBtn.fade-out {
+      animation: fadeOutToLeft 1s forwards;
+    }
 
-      footer {
-        margin-top: 4rem;
-        padding-top: 1rem;
-        border-top: 1px solid #d2d6dc;
-        font-size: 0.875rem;
-        color: #52606d;
-      }
-    </style>
-  </head>
-  <body>
-    <header>
-      <h1>Arnaud Dionne</h1>
-      <p>Welcome! This page is a clean slate so you can practice writing raw HTML and CSS.</p>
+    .fade-in {
+      animation: fadeInFromRight 1s forwards;
+      opacity: 1;
+      pointer-events: auto;
+    }
 
-      <nav>
-        <a href="#about">About</a>
-        <a href="#projects">Projects</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </header>
+  </style>
+</head>
+<body>
+  <!-- Name button that animates in from the right on page load -->
+   <div class="viewport">
+    <button id="nameBtn" class="centered">
+      Arnaud Dionne
+    </button>
 
-    <main>
-      <section id="about">
-        <h2>About</h2>
-        <p>
-          Replace this text with your story. You can add lists, images, or even experiment with layout by editing the HTML
-          and CSS in this file.
-        </p>
-      </section>
+    <!-- Hidden Spotify card that we display after the button fades out -->
+    <div id="spotifyCard" class="centered hidden">
+      <img id="artwork" src="" alt="Album Art" />
+      <h3 id="trackTitle">Track Title</h3>
+      <p id="artist">Artist</p>
+      <p id="status"></p>
+    </div>
+  </div>
 
-      <section id="projects">
-        <h2>Projects</h2>
-        <p>
-          Showcase what you are working on. Add cards, grids, or custom components to get more hands-on HTML practice.
-        </p>
-      </section>
+  <script>
+    // --- Grab all the elements we need once ---
+    const API_URL = "https://api-spotify-2rd1.vercel.app/api/now-playing";
+    const nameBtn = document.getElementById("nameBtn");
+    const card = document.getElementById("spotifyCard");
+    const artwork = document.getElementById("artwork");
+    const trackTitle = document.getElementById("trackTitle");
+    const artist = document.getElementById("artist");
+    const status = document.getElementById("status");
+    loadSpotifyData(); // fetch Spotify data immediately on page load (Loading can take time)
+    // --- Fade the name out when we click it ---
+    nameBtn.addEventListener("click", () => {
 
-      <section id="spotify">
-        <h2>Spotify Now Playing</h2>
-        <p>
-          This section calls a tiny serverless API (hosted on Vercel) that keeps Spotify tokens safe, then returns lightweight
-          JSON for the browser to render. Follow the instructions in the script comments to set up your own endpoint.
-        </p>
-        <button id="load-spotify">Check now playing</button>
-        <article id="spotify-card" class="spotify-card" hidden aria-live="polite">
-          <img id="spotify-artwork" alt="Album artwork" src="" />
-          <div>
-            <h3 id="spotify-track">Track title</h3>
-            <p id="spotify-artist" style="margin: 0;">Artist name</p>
-            <p id="spotify-context" style="margin: 0.25rem 0 0; font-size: 0.95rem; color: #334155;"></p>
-            <p id="spotify-status" style="margin: 0.75rem 0 0; font-size: 0.875rem; color: #52606d;"></p>
-          </div>
-        </article>
-        <p id="spotify-error" style="display: none; color: #b91c1c; margin-top: 1rem;"></p>
-      </section>
+      nameBtn.classList.add("fade-out"); // start fade to the left
 
-      <section id="contact">
-        <h2>Contact</h2>
-        <p>
-          Provide your email or links to social profiles. You can also embed a form or other interactive elements here.
-        </p>
-      </section>
-    </main>
+      // Make the card appear and start its own fade-in animation
 
-    <footer>
-      <p>Copyright &copy; <span id="year"></span> Arnaud Dionne. Built by hand with vanilla HTML and CSS.</p>
-    </footer>
+      document.body.style.backgroundColor = setBgFromArtwork(); // set background color based on artwork
 
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" crossorigin="anonymous"></script>
-    <script>
-      // Keep footer year current without extra maintenance.
-      document.getElementById("year").textContent = new Date().getFullYear();
+      card.classList.remove("hidden"); // unhide the card
 
-      // --- Spotify API integration -----------------------------------------------------------
-      // This frontend calls a serverless endpoint (e.g. https://your-app.vercel.app/api/now-playing)
-      // that holds Spotify credentials and returns sanitized JSON like:
-      // {
-      //   isPlaying: true,
-      //   progressMs: 12345,
-      //   track: { name, album, artists, albumImageUrl, trackUrl },
-      //   context: { type, name },
-      //   lastUpdated: "2024-01-01T12:00:00.000Z"
-      // }
-      //
-      // Steps to make it work:
-      // 1. Implement the Vercel serverless function described below and deploy it.
-      // 2. Update API_URL to point to your live deployment.
-      // 3. (Optional) Add caching headers on the function to avoid rate limits.
+      card.classList.add("fade-in");
 
-      const API_URL = "https://api-spotify-2rd1.vercel.app/api/now-playing";
-      const loadButton = document.getElementById("load-spotify");
-      const errorEl = document.getElementById("spotify-error");
-      const card = document.getElementById("spotify-card");
-      const artwork = document.getElementById("spotify-artwork");
-      const trackTitle = document.getElementById("spotify-track");
-      const artist = document.getElementById("spotify-artist");
-      const context = document.getElementById("spotify-context");
-      const status = document.getElementById("spotify-status");
+    });
 
-      function showError(message) {
-        errorEl.textContent = message;
-        errorEl.style.display = "block";
-        card.hidden = true;
-      }
+    // --- Wait for the fade-out to finish before showing the card ---
+    nameBtn.addEventListener("animationend", (event) => {
+      // Only run when the fade-out animation finishes
+      if (event.animationName !== "fadeOutToLeft") return;
 
-      async function fetchSpotifyTrack() {
-        errorEl.style.display = "none";
-        loadButton.disabled = true;
-        loadButton.textContent = "Loading...";
-        try {
-          const response = await fetch(API_URL, { cache: "no-store" });
-          if (!response.ok) {
-            throw new Error(`Request failed: ${response.status} ${response.statusText}`);
+      nameBtn.classList.add("hidden"); // hide the button
+
+    });
+
+    // --- Fetch Spotify data from the provided API ---
+    async function loadSpotifyData() {
+      try {
+        // Ask the API for the current Spotify track
+        const res = await fetch(API_URL);
+        const data = await res.json(); // convert the response to regular JavaScript data
+
+        if (data && data.track) {
+          // Allow pixel access across origins BEFORE setting src
+          artwork.crossOrigin = "anonymous";
+          artwork.src = data.track.albumImageUrl || "";
+
+          trackTitle.textContent = data.track.name;
+          artist.textContent = data.track.artists.join(", ");
+          status.textContent = data.isPlaying ? "Now Playing" : "Recently Played";
+
+          // If already cached/loaded, compute immediately; else wait for the load event
+          if (artwork.complete && artwork.naturalWidth) {
+          } else {
+            artwork.addEventListener("load", setBgFromArtwork, { once: true });
+            artwork.addEventListener("error", () => {
+              // (optional) fallback if image fails to load
+              // document.body.style.background = "#285c91";
+            }, { once: true });
           }
 
-          const payload = await response.json();
-
-          if (!payload || !payload.track) {
-            showError("No now playing data returned. Try again in a moment.");
-            return;
-          }
-
-          const { track, context: ctx, isPlaying, lastUpdated } = payload;
-
-          trackTitle.innerHTML = track.trackUrl
-            ? `<a href="${track.trackUrl}" target="_blank" rel="noopener">${track.name}</a>`
-            : track.name;
-          artist.textContent = track.artists.join(", ");
-          context.textContent = ctx?.name ? `${ctx.type}: ${ctx.name}` : track.album;
-          status.textContent = isPlaying
-            ? "Currently playing"
-            : `Last played at ${new Date(lastUpdated).toLocaleTimeString()}`;
-          artwork.src = track.albumImageUrl || "";
-          artwork.alt = track.album ? `${track.album} cover` : "Album artwork";
-
-          card.hidden = false;
-
-          // Trigger the GSAP entry animation when fresh data loads.
-          gsap.fromTo(
-            card,
-            { opacity: 0, y: 32 },
-            { opacity: 1, y: 0, duration: 1, ease: "power3.out" }
-          );
-        } catch (error) {
-          console.error(error);
-          showError("Unable to load Spotify data. Check the console or API deployment.");
+        } else {
+          // If the API sends back no track, let the user know
+          trackTitle.textContent = "No track playing";
         }
-        loadButton.disabled = false;
-        loadButton.textContent = "Check now playing";
+      } catch (err) {
+        // Simple error message if something goes wrong (e.g., no internet)
+        trackTitle.textContent = "Error loading data";
+        console.error(err);
+      }
+    }
+
+    function setBgFromArtwork() {
+      const { r, g, b } = getAverageRGB(artwork);
+      // Only change if we got a non-black value (0,0,0 means error/fallback)
+      if (r || g || b) {
+        return(`rgb(${r}, ${g}, ${b})`);
+
+      }
+    }
+
+    function getAverageRGB(imgEl) {
+
+      var blockSize = 5, // only visit every 5 pixels
+          defaultRGB = {r:0,g:0,b:0}, // for non-supporting envs
+          canvas = document.createElement('canvas'),
+          context = canvas.getContext && canvas.getContext('2d'),
+          data, width, height,
+          i = -4,
+          length,
+          rgb = {r:0,g:0,b:0},
+          count = 0;
+
+      if (!context) {
+          return defaultRGB;
       }
 
-      loadButton.addEventListener("click", fetchSpotifyTrack);
+      height = canvas.height = imgEl.naturalHeight || imgEl.offsetHeight || imgEl.height;
+      width = canvas.width = imgEl.naturalWidth || imgEl.offsetWidth || imgEl.width;
 
-      // --- Example GSAP animation ------------------------------------------------------------
-      // Animate the hero elements on page load to demonstrate timeline sequencing.
-      window.addEventListener("load", () => {
-        const tl = gsap.timeline({ defaults: { duration: 1, ease: "power3.out" } });
+      context.drawImage(imgEl, 0, 0);
 
-        tl.from("header h1", { y: 40, opacity: 0 })
-          .from("header p", { y: 20, opacity: 0 }, "-=0.6")
-          .from("nav a", { y: 10, opacity: 0, stagger: 0.1 }, "-=0.6");
-      });
-    </script>
-  </body>
+      try {
+          data = context.getImageData(0, 0, width, height);
+      } catch(e) {
+          /* security error, img on diff domain */
+          return defaultRGB;
+      }
+
+      length = data.data.length;
+
+      while ( (i += blockSize * 4) < length ) {
+          ++count;
+          rgb.r += data.data[i];
+          rgb.g += data.data[i+1];
+          rgb.b += data.data[i+2];
+      }
+
+      // ~~ used to floor values
+      rgb.r = ~~(rgb.r/count);
+      rgb.g = ~~(rgb.g/count);
+      rgb.b = ~~(rgb.b/count);
+
+      return rgb;
+    }
+  </script>
+</body>
 </html>
