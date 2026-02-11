@@ -1,241 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arnaud Dionne</title>
-  <style>
-    /* --- Page layout --- */
-    body {
-      margin: 0;
-      background: white;
-      color: white;
-      font-family: Arial, sans-serif;
-      transition: background-color 1s ease; /* <— fade duration & easing */
-    }
-        /* --- Full-screen positioning context --- */
-    .viewport {
-      position: relative;  /* makes children with absolute position anchor here */
-      height: 100vh;       /* full window height */
-    }
-
-    /* --- Reusable absolute centering --- */
-    .centered {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-    }
-
-    /* --- Hide/show helper --- */
-    .hidden { display: none; }
-
-    /* --- Simple button styling --- */
-    #nameBtn {
-      display: inline-block;
-      cursor: pointer;
-      font-size: 3rem;
-      font-weight: bold;
-      animation: fadeInFromRight 1s forwards;
-      background: transparent;
-      border: none;
-      color: black;
-    }
-
-    /* --- Container for the Spotify info --- */
-    #spotifyCard {
-      background: white;
-      color: black;
-      border-radius: 12px;
-      padding: 1rem;
-      width: 300px;
-      text-align: center;
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    #artwork {
-      width: 100%;
-      border-radius: 10px;
-    }
-
-    /* --- Animation keyframes --- */
-    @keyframes fadeInFromRight {
-      from {
-        opacity: 0;
-        transform: translate(-50%, -50%) translateX(1000px);
-      }
-      to {
-        opacity: 1;
-        transform: translate(-50%, -50%) translateX(0);
-      }
-    }
-
-    @keyframes fadeOutToLeft {
-      from {
-        opacity: 1;
-        transform: translate(-50%, -50%) translateX(0);
-      }
-      to {
-        opacity: 0;
-        transform: translate(-50%, -50%) translateX(-1000px);
-      }
-    }
-
-    /* --- Helper classes toggled by JavaScript --- */
-    #nameBtn.fade-out {
-      animation: fadeOutToLeft 1s forwards;
-    }
-
-    .fade-in {
-      animation: fadeInFromRight 1s forwards;
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veux-tu être ma Valentine ?</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts included in style.css -->
 </head>
 <body>
-  <!-- Name button that animates in from the right on page load -->
-   <div class="viewport">
-    <button id="nameBtn" class="centered">
-      Arnaud Dionne
-    </button>
 
-    <!-- Hidden Spotify card that we display after the button fades out -->
-    <div id="spotifyCard" class="centered hidden">
-      <img id="artwork" src="" alt="Album Art" />
-      <h3 id="trackTitle">Track Title</h3>
-      <p id="artist">Artist</p>
-      <p id="status"></p>
+    <!-- Floating hearts background (managed by JS) -->
+    
+    <!-- Initial Question Page -->
+    <div class="container" id="initial-view">
+        <h1 class="main-title">Veux-tu être ma Valentine ? 💖</h1>
+        <p class="subtitle">Dis oui s'il te plaît...</p>
+        
+        <div class="buttons">
+            <button id="yes-btn" class="btn yes-btn">OUI ❤️</button>
+            <button id="no-btn" class="btn no-btn">Non 💔</button>
+        </div>
     </div>
-  </div>
 
-  <script>
-    // --- Grab all the elements we need once ---
-    const API_URL = "https://api-spotify-2rd1.vercel.app/api/now-playing";
-    const nameBtn = document.getElementById("nameBtn");
-    const card = document.getElementById("spotifyCard");
-    const artwork = document.getElementById("artwork");
-    const trackTitle = document.getElementById("trackTitle");
-    const artist = document.getElementById("artist");
-    const status = document.getElementById("status");
-    loadSpotifyData(); // fetch Spotify data immediately on page load (Loading can take time)
-    // --- Fade the name out when we click it ---
-    nameBtn.addEventListener("click", () => {
+    <!-- Success Page (Hidden Initially) -->
+    <div class="container hidden" id="success-view">
+        <h1 class="success-title">Yay ! Je t'aime ! 💑</h1>
+        
+        <div class="gallery">
+            <!-- 
+                ================================================================
+                INSTRUCTIONS FOR ADDING YOUR PHOTOS:
+                1. Put your photos in the 'images' folder.
+                2. Replace the 'src' below with your filename (e.g. 'images/photo1.jpg').
+                3. Add as many <img> tags as you want!
+                ================================================================
+            -->
+            
+            <img src="https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif" alt="Cute Gif">
+            
+            <!-- Example of where to put your own photo -->
+            <!-- <img src="images/your-photo.jpg" alt="Us Together"> -->
 
-      nameBtn.classList.add("fade-out"); // start fade to the left
+            <div class="love-text">
+                <p>Merci d'avoir dit oui ! ❤️</p>
+                <p>Tu es la meilleure chose qui me soit arrivée.</p>
+                <p>On se voit le 14 Février ! 🌹</p>
+                <!-- Add your own message here! -->
+            </div>
+        </div>
+    </div>
 
-      // Make the card appear and start its own fade-in animation
-
-      document.body.style.backgroundColor = setBgFromArtwork(); // set background color based on artwork
-
-      card.classList.remove("hidden"); // unhide the card
-
-      card.classList.add("fade-in");
-
-    });
-
-    // --- Wait for the fade-out to finish before showing the card ---
-    nameBtn.addEventListener("animationend", (event) => {
-      // Only run when the fade-out animation finishes
-      if (event.animationName !== "fadeOutToLeft") return;
-
-      nameBtn.classList.add("hidden"); // hide the button
-
-    });
-
-    // --- Fetch Spotify data from the provided API ---
-    async function loadSpotifyData() {
-      try {
-        // Ask the API for the current Spotify track
-        const res = await fetch(API_URL);
-        const data = await res.json(); // convert the response to regular JavaScript data
-
-        if (data && data.track) {
-          // Allow pixel access across origins BEFORE setting src
-          artwork.crossOrigin = "anonymous";
-          artwork.src = data.track.albumImageUrl || "";
-
-          trackTitle.textContent = data.track.name;
-          artist.textContent = data.track.artists.join(", ");
-          status.textContent = data.isPlaying ? "Now Playing" : "Recently Played";
-
-          // If already cached/loaded, compute immediately; else wait for the load event
-          if (artwork.complete && artwork.naturalWidth) {
-          } else {
-            artwork.addEventListener("load", setBgFromArtwork, { once: true });
-            artwork.addEventListener("error", () => {
-              // (optional) fallback if image fails to load
-              // document.body.style.background = "#285c91";
-            }, { once: true });
-          }
-
-        } else {
-          // If the API sends back no track, let the user know
-          trackTitle.textContent = "No track playing";
-        }
-      } catch (err) {
-        // Simple error message if something goes wrong (e.g., no internet)
-        trackTitle.textContent = "Error loading data";
-        console.error(err);
-      }
-    }
-
-    function setBgFromArtwork() {
-      const { r, g, b } = getAverageRGB(artwork);
-      // Only change if we got a non-black value (0,0,0 means error/fallback)
-      if (r || g || b) {
-        return(`rgb(${r}, ${g}, ${b})`);
-
-      }
-    }
-
-    function getAverageRGB(imgEl) {
-
-      var blockSize = 5, // only visit every 5 pixels
-          defaultRGB = {r:0,g:0,b:0}, // for non-supporting envs
-          canvas = document.createElement('canvas'),
-          context = canvas.getContext && canvas.getContext('2d'),
-          data, width, height,
-          i = -4,
-          length,
-          rgb = {r:0,g:0,b:0},
-          count = 0;
-
-      if (!context) {
-          return defaultRGB;
-      }
-
-      height = canvas.height = imgEl.naturalHeight || imgEl.offsetHeight || imgEl.height;
-      width = canvas.width = imgEl.naturalWidth || imgEl.offsetWidth || imgEl.width;
-
-      context.drawImage(imgEl, 0, 0);
-
-      try {
-          data = context.getImageData(0, 0, width, height);
-      } catch(e) {
-          /* security error, img on diff domain */
-          return defaultRGB;
-      }
-
-      length = data.data.length;
-
-      while ( (i += blockSize * 4) < length ) {
-          ++count;
-          rgb.r += data.data[i];
-          rgb.g += data.data[i+1];
-          rgb.b += data.data[i+2];
-      }
-
-      // ~~ used to floor values
-      rgb.r = ~~(rgb.r/count);
-      rgb.g = ~~(rgb.g/count);
-      rgb.b = ~~(rgb.b/count);
-
-      return rgb;
-    }
-  </script>
+    <script src="script.js"></script>
 </body>
 </html>
