@@ -32,12 +32,21 @@ body {
 }
 
 #mosaic-background img {
-    height: 15vh;
-    /* Responsive height */
+    height: 25vh;
     flex-grow: 1;
     object-fit: cover;
-    margin: 0;
-    min-width: 10vh;
+    margin: 2px;
+    min-width: 15vh;
+    border-radius: 8px;
+    opacity: 0.8;
+    transition: all 0.5s ease;
+}
+
+#mosaic-background img:hover {
+    transform: scale(1.05);
+    z-index: 1;
+    opacity: 1;
+    filter: none;
 }
 
 /* Floating Hearts Background */
