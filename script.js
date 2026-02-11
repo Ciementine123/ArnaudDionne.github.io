@@ -1,4 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // === Mosaic Background Logic ===
+    const mosaicContainer = document.getElementById('mosaic-background');
+    if (mosaicContainer) {
+        // Try to load photos photo1.jpg through photo50.jpg
+        for (let i = 1; i <= 50; i++) {
+            const img = document.createElement('img');
+            img.src = `images/photo${i}.jpg`;
+            img.style.display = 'none'; // Hidden until loaded
+
+            // Only show if image successfully loads
+            img.onload = function () {
+                this.style.display = 'block';
+            };
+
+            // If image fails (not found), remove it
+            img.onerror = function () {
+                this.remove();
+            };
+
+            mosaicContainer.appendChild(img);
+        }
+    }
+
     // === Variables ===
     const initialView = document.getElementById('initial-view');
     const successView = document.getElementById('success-view');
