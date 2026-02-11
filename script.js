@@ -11,15 +11,15 @@ document.addEventListener('DOMContentLoaded', () => {
         // Disappear the No button
         noBtn.style.opacity = '0';
         noBtn.style.pointerEvents = 'none';
-        
+
         // Make the Yes button bigger and more prominent
         yesBtn.style.transform = 'scale(1.4)';
         yesBtn.innerText = "S'il te plaît ? ❤️";
-        
+
         // Wait and change back text if user delays
         setTimeout(() => {
             if (successView.classList.contains('hidden')) {
-                 yesBtn.innerText = "Oui ❤️";
+                yesBtn.innerText = "Oui ❤️";
             }
         }, 3000);
     });
@@ -28,22 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
     yesBtn.addEventListener('click', () => {
         // Hide initial view
         initialView.classList.add('hidden');
-        
+
         // Show success view with animation
         successView.classList.remove('hidden');
-        successView.style.opacity = 0;
         successView.style.display = 'block';
-        
-        // Fade in
-        let op = 0;
-        const fadeInterval = setInterval(() => {
-            if (op >= 1) {
-                clearInterval(fadeInterval);
-            }
-            successView.style.opacity = op;
-            op += 0.05;
-        }, 30);
-        
+        successView.style.opacity = '1';
+
         // Launch confetti!
         createConfetti();
     });
@@ -62,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
             heart.remove();
         }, 5000); // Clean up
     }
-    
+
     setInterval(createHeart, 500);
 
     // === Confetti Effect ===
@@ -73,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
             confetti.style.left = Math.random() * 100 + 'vw'; /* Random X position */
             confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`; /* Random color */
             confetti.style.animationDuration = (Math.random() * 3) + 2 + "s";
-            
+
             body.appendChild(confetti);
 
             setTimeout(() => {

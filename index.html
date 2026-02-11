@@ -29,9 +29,17 @@
         <h1 class="success-title">Yay ! Je t'aime ! 💑</h1>
 
         <div class="gallery">
+            <p>Si tu vois ce texte, la page 'succès' s'est affichée !</p>
             <img src="https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif" alt="Cute Gif">
-            <img src="images/final_photo1.jpg" alt="Our Memory 1">
-            <img src="images/final_photo2.jpg" alt="Our Memory 2">
+
+            <!-- Test image at root -->
+            <img src="test_photo.jpg" alt="Test Photo Root"
+                onerror="this.style.display='none'; alert('Error loading root photo');">
+
+            <!-- Standard images -->
+            <img src="images/final_photo1.jpg" alt="Our Memory 1" onerror="this.alt='Image 1 not found'">
+            <img src="images/final_photo2.jpg" alt="Our Memory 2" onerror="this.alt='Image 2 not found'">
+
             <div class="love-text">
                 <p>Merci d'avoir dit oui ! ❤️</p>
                 <p>Tu es la meilleure chose qui me soit arrivée.</p>
