@@ -21,37 +21,24 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-wrap: wrap;
     z-index: -10;
-    /* Far back */
     background-color: #ffe6e6;
-    /* Base color lives here now */
-    align-content: flex-start;
-    opacity: 0.6;
-    /* Adjust visibility */
-    filter: blur(2px) grayscale(30%);
-    /* Artistic touch */
-    pointer-events: none;
     overflow: hidden;
 }
 
 #mosaic-background img {
-    height: 25vh;
-    flex-grow: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    margin: 2px;
-    min-width: 15vh;
-    border-radius: 8px;
-    opacity: 0.8;
-    transition: all 0.5s ease;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
 }
 
-#mosaic-background img:hover {
-    transform: scale(1.05);
-    z-index: 1;
+#mosaic-background img.active {
     opacity: 1;
-    filter: none;
 }
 
 /* Floating Hearts Background */

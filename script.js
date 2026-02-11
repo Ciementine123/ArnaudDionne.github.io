@@ -1,25 +1,49 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // === Mosaic Background Logic ===
+    // === Background Slideshow Logic ===
     const mosaicContainer = document.getElementById('mosaic-background');
     if (mosaicContainer) {
-        // Try to load photos photo1.jpg through photo50.jpg
-        for (let i = 1; i <= 50; i++) {
+        const images = [];
+        let activeIndex = 0;
+
+        // Helper to add image
+        const addImage = (src) => {
             const img = document.createElement('img');
-            img.src = `images/photo${i}.jpg`;
-            img.style.display = 'none'; // Hidden until loaded
-
-            // Only show if image successfully loads
-            img.onload = function () {
-                this.style.display = 'block';
+            img.src = src;
+            // Don't error out, just remove if fails
+            img.onerror = () => { img.remove(); removeImageFromArray(img); };
+            img.onload = () => {
+                // First image loaded becomes active
+                if (images.length === 1) img.classList.add('active');
             };
-
-            // If image fails (not found), remove it
-            img.onerror = function () {
-                this.remove();
-            };
-
             mosaicContainer.appendChild(img);
+            images.push(img);
+        };
+
+        const removeImageFromArray = (imgToRemove) => {
+            const index = images.indexOf(imgToRemove);
+            if (index > -1) {
+                images.splice(index, 1);
+            }
+        };
+
+        // Try load photo1 to photo50
+        for (let i = 1; i <= 50; i++) {
+            addImage(`images/photo${i}.jpg`);
         }
+
+        // Cycle images
+        setInterval(() => {
+            if (images.length > 1) {
+                // Remove active from current
+                images[activeIndex].classList.remove('active');
+
+                // Next index
+                activeIndex = (activeIndex + 1) % images.length;
+
+                // Add active to next
+                images[activeIndex].classList.add('active');
+            }
+        }, 3500); // 3.5 seconds per photo
     }
 
     // === Variables ===
