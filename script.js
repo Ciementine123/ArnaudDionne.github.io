@@ -1,69 +1,31 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // === Background Slideshow Logic ===
-    const mosaicContainer = document.getElementById('mosaic-background');
-    if (mosaicContainer) {
-        const images = [];
-        let activeIndex = 0;
+    // === SLIDESHOW LOGIC ===
+    const slides = document.querySelectorAll('#slideshow-bg img');
+    let currentSlide = 0;
 
-        // Helper to add image
-        const addImage = (src) => {
-            const img = document.createElement('img');
-            img.src = src;
-            // Don't error out, just remove if fails
-            img.onerror = () => { img.remove(); removeImageFromArray(img); };
-            img.onload = () => {
-                // First image loaded becomes active
-                if (images.length === 1) img.classList.add('active');
-            };
-            mosaicContainer.appendChild(img);
-            images.push(img);
-        };
-
-        const removeImageFromArray = (imgToRemove) => {
-            const index = images.indexOf(imgToRemove);
-            if (index > -1) {
-                images.splice(index, 1);
-            }
-        };
-
-        // Try load photo1 to photo50
-        for (let i = 1; i <= 50; i++) {
-            addImage(`images/photo${i}.jpg`);
-        }
-
-        // Cycle images
+    if (slides.length > 1) {
         setInterval(() => {
-            if (images.length > 1) {
-                // Remove active from current
-                images[activeIndex].classList.remove('active');
-
-                // Next index
-                activeIndex = (activeIndex + 1) % images.length;
-
-                // Add active to next
-                images[activeIndex].classList.add('active');
-            }
-        }, 3500); // 3.5 seconds per photo
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }, 4000); // Change every 4 seconds
     }
 
-    // === Variables ===
+    // === ELEMENTS ===
     const initialView = document.getElementById('initial-view');
     const successView = document.getElementById('success-view');
     const noBtn = document.getElementById('no-btn');
     const yesBtn = document.getElementById('yes-btn');
-    const body = document.body;
 
-    // === No Button Logic ===
+    // === NO BUTTON ===
     noBtn.addEventListener('click', () => {
-        // Disappear the No button
         noBtn.style.opacity = '0';
         noBtn.style.pointerEvents = 'none';
+        setTimeout(() => { noBtn.style.display = 'none'; }, 300);
 
-        // Make the Yes button bigger and more prominent
         yesBtn.style.transform = 'scale(1.4)';
         yesBtn.innerText = "S'il te plaît ? ❤️";
 
-        // Wait and change back text if user delays
         setTimeout(() => {
             if (successView.classList.contains('hidden')) {
                 yesBtn.innerText = "Oui ❤️";
@@ -71,51 +33,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 3000);
     });
 
-    // === Yes Button Logic ===
+    // === YES BUTTON ===
     yesBtn.addEventListener('click', () => {
-        // Hide initial view
         initialView.classList.add('hidden');
-
-        // Show success view with animation
         successView.classList.remove('hidden');
-        successView.style.display = 'block';
-        successView.style.opacity = '1';
-
-        // Launch confetti!
         createConfetti();
     });
 
-    // === Floating Hearts Animation ===
+    // === FLOATING HEARTS ===
     function createHeart() {
         const heart = document.createElement('div');
         heart.classList.add('heart-bg');
         heart.innerHTML = '❤️';
         heart.style.left = Math.random() * 100 + 'vw';
-        heart.style.animationDuration = Math.random() * 3 + 2 + 's'; // 2-5s
-        heart.style.opacity = Math.random();
-        body.appendChild(heart);
-
-        setTimeout(() => {
-            heart.remove();
-        }, 5000); // Clean up
+        heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
     }
+    setInterval(createHeart, 600);
 
-    setInterval(createHeart, 500);
-
-    // === Confetti Effect ===
+    // === CONFETTI ===
     function createConfetti() {
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 80; i++) {
             const confetti = document.createElement('div');
             confetti.classList.add('confetti');
-            confetti.style.left = Math.random() * 100 + 'vw'; /* Random X position */
-            confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`; /* Random color */
-            confetti.style.animationDuration = (Math.random() * 3) + 2 + "s";
-
-            body.appendChild(confetti);
-
-            setTimeout(() => {
-                confetti.remove();
-            }, 5000);
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.top = '-10px';
+            confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 60%)`;
+            confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+            document.body.appendChild(confetti);
+            setTimeout(() => confetti.remove(), 5000);
         }
     }
 });

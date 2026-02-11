@@ -6,21 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Veux-tu être ma Valentine ?</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Google Fonts included in style.css -->
 </head>
 
 <body>
 
-    <!-- Mosaic Background (Dynamic) -->
-    <div id="mosaic-background"></div>
-
-    <!-- Floating hearts background (managed by JS) -->
+    <!-- Background Slideshow - 14 photos hardcoded -->
+    <div id="slideshow-bg">
+        <img src="images/photo1.jpg" class="active" alt="">
+        <img src="images/photo2.jpg" alt="">
+        <img src="images/photo3.jpg" alt="">
+        <img src="images/photo4.jpg" alt="">
+        <img src="images/photo5.jpg" alt="">
+        <img src="images/photo6.jpg" alt="">
+        <img src="images/photo7.jpg" alt="">
+        <img src="images/photo8.jpg" alt="">
+        <img src="images/photo9.jpg" alt="">
+        <img src="images/photo10.jpg" alt="">
+        <img src="images/photo11.jpg" alt="">
+        <img src="images/photo12.jpg" alt="">
+        <img src="images/photo13.jpg" alt="">
+        <img src="images/photo14.jpg" alt="">
+    </div>
 
     <!-- Initial Question Page -->
     <div class="container" id="initial-view">
-        <h1 class="main-title">Veux-tu être ma Valentine ? 💖</h1>
+        <h1>Veux-tu être ma Valentine ? 💖</h1>
         <p class="subtitle">Dis oui s'il te plaît...</p>
-
         <div class="buttons">
             <button id="yes-btn" class="btn yes-btn">OUI ❤️</button>
             <button id="no-btn" class="btn no-btn">Non 💔</button>
@@ -29,26 +40,11 @@
 
     <!-- Success Page (Hidden Initially) -->
     <div class="container hidden" id="success-view">
-        <h1 class="success-title">Yay ! Je t'aime ! 💑</h1>
-
-        <div class="gallery">
-            <p>Si tu vois ce texte, la page 'succès' s'est affichée !</p>
-            <img src="https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif" alt="Cute Gif">
-
-            <!-- Test image at root -->
-            <img src="test_photo.jpg" alt="Test Photo Root"
-                onerror="this.style.display='none'; alert('Error loading root photo');">
-
-            <!-- Standard images -->
-            <img src="images/final_photo1.jpg" alt="Our Memory 1" onerror="this.alt='Image 1 not found'">
-            <img src="images/final_photo2.jpg" alt="Our Memory 2" onerror="this.alt='Image 2 not found'">
-
-            <div class="love-text">
-                <p>Merci d'avoir dit oui ! ❤️</p>
-                <p>Tu es la meilleure chose qui me soit arrivée.</p>
-                <p>On se voit le 14 Février ! 🌹</p>
-                <!-- Add your own message here! -->
-            </div>
+        <h1>Yay ! Je t'aime ! 💑</h1>
+        <div class="love-text">
+            <p>Merci d'avoir dit oui ! ❤️</p>
+            <p>Tu es la meilleure chose qui me soit arrivée.</p>
+            <p>On se voit le 14 Février ! 🌹</p>
         </div>
     </div>
 
